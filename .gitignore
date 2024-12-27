@@ -35,3 +35,10 @@ build/
 ### ENV ###
 .env
 port.sh
+
+#Others
+FileSystem/uploads/media/*
+!FileSystem/uploads/media/.keep
+
+FileSystem/uploads/profile/*
+!FileSystem/uploads/profile/.keep

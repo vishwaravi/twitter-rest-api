@@ -74,8 +74,11 @@ public class TweetService{
         try{
             List<TweetEntity> tweets  = tweetRepo.findAll();
             for (TweetEntity i : tweets){
-                Path path = Paths.get(i.getTweetFilePath());
-                String imgBase64 = "data:image/png;base64," + Base64.getEncoder().encodeToString(Files.readAllBytes(path));
+                Path tweetImgPath = Paths.get(i.getTweetFilePath());
+                String imgBase64 = "";
+
+                if(Files.exists(tweetImgPath))
+                    imgBase64 = "data:image/png;base64," + Base64.getEncoder().encodeToString(Files.readAllBytes(tweetImgPath));
                 i.setTweetFilePath(imgBase64);
             }
             return tweets;

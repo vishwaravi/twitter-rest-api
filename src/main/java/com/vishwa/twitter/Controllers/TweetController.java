@@ -61,7 +61,7 @@ public class TweetController {
             }
             else{
                 tweet.setFilePath(tweetPath);
-                return new ResponseEntity<>(tweetService.postTweet(tweet),HttpStatus.OK);
+                return new ResponseEntity<>(tweetService.postTweet(tweet),HttpStatus.CREATED);
             }
         }
         else{
