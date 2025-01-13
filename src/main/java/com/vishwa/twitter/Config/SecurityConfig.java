@@ -1,5 +1,7 @@
 package com.vishwa.twitter.Config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.vishwa.twitter.Filters.JWTFilter;
 import com.vishwa.twitter.Services.UserService;
@@ -30,8 +33,15 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
-        .cors(Customizer.withDefaults())
         .csrf(csrf -> csrf.disable())
+        .cors(cors -> cors.configurationSource(req -> {
+            CorsConfiguration configuration =  new CorsConfiguration();
+            configuration.setAllowedOriginPatterns(List.of("http://localhost:3000"));
+            configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
+            configuration.setAllowedHeaders(List.of("Authorization", "Content-Type")); 
+            configuration.setAllowCredentials(true); 
+            return configuration;
+        }))
         .authorizeHttpRequests(req -> {
             req.requestMatchers(WHITE_LIST).permitAll()
             .anyRequest().authenticated();

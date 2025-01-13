@@ -74,6 +74,9 @@ public class TweetService{
         try{
             List<TweetEntity> tweets  = tweetRepo.findAll();
             for (TweetEntity i : tweets){
+                if (likeRepo.existsByTweetIdAndLikedBy(i.getId(), auth().getName()))
+                    i.setIsLiked(true);
+                if (i.getTweetFilePath() == null) continue;
                 Path tweetImgPath = Paths.get(i.getTweetFilePath());
                 String imgBase64 = "";
 
@@ -153,8 +156,6 @@ public class TweetService{
     @Transactional
     public boolean dislikePost(long tweetId){
         if (likeRepo.existsByTweetIdAndLikedBy(tweetId, auth().getName())) {
-            TweetEntity tweet = tweetRepo.findById(tweetId).get();
-            tweet.setLikesCount(likeRepo.countByTweetId(tweetId)-1);
             likeRepo.deleteByTweetIdAndLikedBy(tweetId, auth().getName());
             return true;
         }

@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,4 +49,8 @@ public class TweetEntity {
     @Column(name = "likes_count")
     @Builder.Default
     private Long likesCount = 0L;
+
+    @Builder.Default
+    @Transient
+    private Boolean isLiked = false;
 }

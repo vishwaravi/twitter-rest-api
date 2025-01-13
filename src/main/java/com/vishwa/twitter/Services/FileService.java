@@ -56,7 +56,6 @@ public class FileService {
         return auth().getName()+System.currentTimeMillis()+file.getOriginalFilename();
     }
 
-    @SuppressWarnings("null")
     public boolean checkFileType(MultipartFile file){
         if(file.isEmpty()) return false;
         if(file.getContentType().contains("image")) return true;
