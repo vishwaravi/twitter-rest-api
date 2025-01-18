@@ -78,10 +78,12 @@ public class TweetService{
                     i.setIsLiked(true);
                 if (i.getTweetFilePath() == null) continue;
                 Path tweetImgPath = Paths.get(i.getTweetFilePath());
+                System.out.println(tweetImgPath);
                 String imgBase64 = "";
 
                 if(Files.exists(tweetImgPath))
-                    imgBase64 = "data:image/png;base64," + Base64.getEncoder().encodeToString(Files.readAllBytes(tweetImgPath));
+                    imgBase64 = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(Files.readAllBytes(tweetImgPath));
+                else System.out.println("path not exists");
                 i.setTweetFilePath(imgBase64);
             }
             return tweets;

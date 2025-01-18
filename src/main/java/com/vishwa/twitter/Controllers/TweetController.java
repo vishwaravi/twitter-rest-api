@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vishwa.twitter.Dto.TweetDto;
 import com.vishwa.twitter.Entities.CommentEntity;
 import com.vishwa.twitter.Entities.TweetEntity;
+import com.vishwa.twitter.Repositories.CommentRepo;
 import com.vishwa.twitter.Services.FileService;
 import com.vishwa.twitter.Services.TweetService;
 import com.vishwa.twitter.utils.ResObj;
@@ -33,7 +34,9 @@ public class TweetController {
 
     @Autowired
     private ResObj resObj;
-   
+    @Autowired
+    private CommentRepo commentRepo;
+
     @GetMapping
     List<TweetEntity> getTweets(){
         return tweetService.getTweets();
@@ -102,6 +105,12 @@ public class TweetController {
             resObj.setStatus("Something went Wrong.");
             return new ResponseEntity<>(resObj,HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/{tweetId}/comments")
+    ResponseEntity<?> getCommentsByTweet(@PathVariable long tweetId){
+        List<CommentEntity> comments = commentRepo.findAllByTweetId(tweetId);
+        return new ResponseEntity<>(comments,HttpStatus.OK);
     }
 
     @PutMapping("/{tweetId}/like")

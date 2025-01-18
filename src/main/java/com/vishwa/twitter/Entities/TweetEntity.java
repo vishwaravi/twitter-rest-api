@@ -2,6 +2,8 @@ package com.vishwa.twitter.Entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,6 +45,8 @@ public class TweetEntity {
     @Column(name = "time_stamp", nullable = false)
     private String timeStamp;
 
+    @Transient
+    @JsonIgnore
     @OneToMany(mappedBy = "tweetId", orphanRemoval = true)
     private List<CommentEntity> comments;
 
