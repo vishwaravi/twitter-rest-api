@@ -25,7 +25,7 @@ import com.vishwa.twitter.Services.UserService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private static final String[] WHITE_LIST = {"register","login"};
+    private static final String[] WHITE_LIST = {"/register","/login"};
     @Autowired
     UserService userService;
     @Autowired

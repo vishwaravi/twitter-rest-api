@@ -57,7 +57,7 @@ public class TweetService{
         Optional<TweetEntity>  tweet = tweetRepo.findById(tweetId);
         try{
             if(tweet.isPresent()){
-                Path path = Paths.get(tweet.get().getTweetFilePath());
+                Path path = Path.of(tweet.get().getTweetFilePath());
                 String imgBase64 = "data:image/png;base64," + Base64.getEncoder().encodeToString(Files.readAllBytes(path));
                 tweet.get().setTweetFilePath(imgBase64);
                 return tweet;

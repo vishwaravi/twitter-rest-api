@@ -7,8 +7,8 @@ This project is a Twitter-like backend application built using Spring Boot and M
 
 ## Technologies Used
 ### Backend :
-* Java (version : JDK 21 used)
-* Spring Boot (version 3.3.5)
+* Java (version : JDK 21 LTS)
+* Spring Boot (version 3.4.1)
 * Dependencies
     * Spring Web
     * Spring Security
@@ -17,7 +17,8 @@ This project is a Twitter-like backend application built using Spring Boot and M
     * Lombok
     * JJWT (JWT Authentication)
 ### Database :
-- MySQL
+- Maria DB
+
 ### TESTING 
 - [POSTMAN](https://www.postman.com/downloads/)
 ### Installation :
@@ -29,14 +30,9 @@ Step 3 : Setup the Environment variables using .env file by Your db url and pass
 DB_URL= "Write Your DB URL starts With JDBC"
 DB_USERNAME= "username here"
 DB_PASSWORD= "password here"
+JWT_SECRET="enter the secret"
 ```
 step 4 : Run the application
-
-#### Installing JAVA :
-To Install Java in Windows, Go to The Official JAVA Website by [Click Here](https://www.java.com/en/download) and download the latest java Package (used : JDK 21 LTS).
-
-#### Installing MySQL :
-To Install MySql in Windows, Visit The The Official MySQL site by [Click Here](https://dev.mysql.com/downloads/installer/) and Choose the Latest Supported version (used : V8.0.39) click the MSI installer and Download it.
 
 ---
 

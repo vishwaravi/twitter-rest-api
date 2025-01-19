@@ -3,7 +3,6 @@ package com.vishwa.twitter.Services;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -25,9 +24,9 @@ public class FileService {
             Path filePath;
     
             if (where.equals("media"))
-                filePath = Paths.get(uploadDir, "/", "media", "/", fileName);
+                filePath = Path.of(uploadDir, "/", "media", "/", fileName);
             else
-                filePath = Paths.get(uploadDir, "/", "profile", "/", fileName);
+                filePath = Path.of(uploadDir, "/", "profile", "/", fileName);
     
             Files.write(filePath, data);
             return filePath.toAbsolutePath().toString();
@@ -41,7 +40,7 @@ public class FileService {
     public boolean deleteFile(String path){
         if(path == null) return true;
         
-        Path filePath = Paths.get(path);
+        Path filePath = Path.of(path);
         try{
             Files.deleteIfExists(filePath);
             return true;
