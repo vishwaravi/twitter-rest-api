@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vishwa.twitter.Dto.TweetDto;
 import com.vishwa.twitter.Entities.CommentEntity;
 import com.vishwa.twitter.Entities.TweetEntity;
-import com.vishwa.twitter.Repositories.CommentRepo;
 import com.vishwa.twitter.Services.FileService;
 import com.vishwa.twitter.Services.TweetService;
 import com.vishwa.twitter.utils.ResObj;
@@ -34,8 +33,6 @@ public class TweetController {
 
     @Autowired
     private ResObj resObj;
-    @Autowired
-    private CommentRepo commentRepo;
 
     @GetMapping
     List<TweetEntity> getTweets(){
@@ -68,9 +65,7 @@ public class TweetController {
         else{
             resObj.setStatus("tweet Cannot be empty");
             return new ResponseEntity<>(resObj,HttpStatus.BAD_REQUEST);
-        }
-        
-            
+        }    
     }
 
     @DeleteMapping("/{tweetId}")
@@ -86,7 +81,7 @@ public class TweetController {
     }
     
     @PutMapping("/{tweetId}/comment")
-    ResponseEntity<?> postComment(@ModelAttribute CommentEntity comment,@PathVariable int tweetId){
+    ResponseEntity<?> postComment(@ModelAttribute CommentEntity comment,@PathVariable long tweetId){
         if(tweetService.postComment(comment,tweetId)!=null)
         return new ResponseEntity<>(tweetService.postComment(comment,tweetId),HttpStatus.OK);
         else{
@@ -108,8 +103,8 @@ public class TweetController {
     }
 
     @GetMapping("/{tweetId}/comments")
-    ResponseEntity<?> getCommentsByTweet(@PathVariable long tweetId){
-        List<CommentEntity> comments = commentRepo.findAllByTweetId(tweetId);
+    ResponseEntity<?> getCommentsByTweet(@PathVariable long tweetId) throws IOException{
+        List<CommentEntity> comments = tweetService.getComments(tweetId);
         return new ResponseEntity<>(comments,HttpStatus.OK);
     }
 

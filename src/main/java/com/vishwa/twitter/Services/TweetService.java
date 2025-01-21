@@ -22,6 +22,7 @@ import com.vishwa.twitter.Entities.TweetEntity;
 import com.vishwa.twitter.Repositories.CommentRepo;
 import com.vishwa.twitter.Repositories.LikeRepo;
 import com.vishwa.twitter.Repositories.TweetRepo;
+import com.vishwa.twitter.Repositories.UserRepo;
 import com.vishwa.twitter.utils.TimeStamp;
 
 @Service
@@ -34,6 +35,8 @@ public class TweetService{
     private LikeRepo likeRepo;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private UserRepo userRepo;
 
     //For post the tweet
     public TweetEntity postTweet(TweetDto tweetDto){
@@ -58,8 +61,8 @@ public class TweetService{
         try{
             if(tweet.isPresent()){
                 Path path = Path.of(tweet.get().getTweetFilePath());
-                String imgBase64 = "data:image/png;base64," + Base64.getEncoder().encodeToString(Files.readAllBytes(path));
-                tweet.get().setTweetFilePath(imgBase64);
+                String postImgBase64 = "data:image/png;base64," + Base64.getEncoder().encodeToString(Files.readAllBytes(path));
+                tweet.get().setTweetFilePath(postImgBase64);
                 return tweet;
             }
             else return null;
@@ -70,21 +73,36 @@ public class TweetService{
     }
 
     //for fetch all tweets
-    public List<TweetEntity> getTweets(){
+    public List<TweetEntity> getTweets() {
         try{
             List<TweetEntity> tweets  = tweetRepo.findAll();
             for (TweetEntity i : tweets){
+                String profilePathtmp = "";
+
+                // Checking if post viewer already liked the post
                 if (likeRepo.existsByTweetIdAndLikedBy(i.getId(), auth().getName()))
                     i.setIsLiked(true);
-                if (i.getTweetFilePath() == null) continue;
-                Path tweetImgPath = Paths.get(i.getTweetFilePath());
-                System.out.println(tweetImgPath);
-                String imgBase64 = "";
 
-                if(Files.exists(tweetImgPath))
-                    imgBase64 = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(Files.readAllBytes(tweetImgPath));
-                else System.out.println("path not exists");
-                i.setTweetFilePath(imgBase64);
+                // Getting tweet Post Image src
+                if (i.getTweetFilePath() != null) {
+                    Path tweetImgPath = Paths.get(i.getTweetFilePath());
+                    if(Files.exists(tweetImgPath)) {
+                        String postImgBase64 = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(Files.readAllBytes(tweetImgPath));
+                        i.setTweetFilePath(postImgBase64);
+                    }
+                }
+                
+                profilePathtmp = userRepo.getProfileImgByUserId(i.getUserId());
+
+                if (profilePathtmp != null){
+                    Path profileImgPath = Paths.get(profilePathtmp);
+                    if(Files.exists(profileImgPath)) {
+                        String profileBase64 = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(Files.readAllBytes(profileImgPath));
+
+                        i.setUserProfile(profileBase64);
+                    }
+                }
+
             }
             return tweets;
         }
@@ -113,13 +131,27 @@ public class TweetService{
         else return false;
     }
 
+    public List<CommentEntity> getComments(long tweetId) throws IOException{
+        List<CommentEntity> comments = commentRepo.findAllByTweetId(tweetId);
+        for (CommentEntity i : comments){
+            String userId = i.getUserId();
+            String profilePath = userRepo.getProfileImgByUserId(userId);
+            Path path = Paths.get(profilePath);
+            if(Files.exists(path)){
+                String profileImgBase64 = "data:image/jpg;base64," + Base64.getEncoder().encodeToString(Files.readAllBytes(path));
+                i.setUserProfile(profileImgBase64);
+            }
+        }
+        return comments;
+    }
+
     //For post the comment
     public CommentEntity postComment(CommentEntity comment, long tweetId){
         String userName = auth().getName();
-        if(getTweet(tweetId).isPresent()){
+        if(tweetRepo.findById(tweetId).isPresent()){
             comment.setTweetId(tweetId);
             comment.setUserId(userName);
-            comment.setTimeStamp(TimeStamp.getTStamp());
+            // comment.setTimeStamp(TimeStamp.getTStamp());
             return commentRepo.save(comment);
         }
         else return null;

@@ -57,4 +57,7 @@ public class TweetEntity {
     @Builder.Default
     @Transient
     private Boolean isLiked = false;
+
+    @Transient
+    private String userProfile;
 }
