@@ -60,7 +60,7 @@ public class UserController {
     }   
 
     @PostMapping("/register")
-    ResponseEntity<?> registerUser(@ModelAttribute RegisterDto user){
+    ResponseEntity<?> registerUser(@RequestBody RegisterDto user){
         String profilePath = fileService.uploadFile(user.getProfile(),"profile");
         String bannerPath = fileService.uploadFile(user.getBanner(),"profile");
         

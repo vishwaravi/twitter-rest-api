@@ -8,7 +8,7 @@ This project is a Twitter-like backend application built using Spring Boot and M
 ## Technologies Used
 ### Backend :
 * Java (version : JDK 21 LTS)
-* Spring Boot (version 3.4.1)
+* Spring Boot (version 3.4.2)
 * Dependencies
     * Spring Web
     * Spring Security
@@ -19,20 +19,26 @@ This project is a Twitter-like backend application built using Spring Boot and M
 ### Database :
 - Maria DB
 
+- ℹ️ Note : 
+    if you are using MySQL or PostGres. Change the Driver Dependency in pom.xml and Change Connection URL in .env Config.
+
 ### TESTING 
 - [POSTMAN](https://www.postman.com/downloads/)
 ### Installation :
 
 Step 1 : Clone the Repo. <br>
 Step 2 : rename the ".env.example" file to ".env" <br>
-Step 3 : Setup the Environment variables using .env file by Your db url and password<br> Example :
+Step 3 : create a Database.
+<br>
+Step 4 : Setup the Environment variables using .env file by Your db url and password<br> Example :
 ```javascript
-DB_URL= "Write Your DB URL starts With JDBC"
+DB_URL= "jdbc:mariadb://localhost:3306/DB_name"
 DB_USERNAME= "username here"
 DB_PASSWORD= "password here"
 JWT_SECRET="enter the secret"
 ```
-step 4 : Run the application
+step 5 : Run the application
+
 
 ---
 
